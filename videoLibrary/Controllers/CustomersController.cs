@@ -32,9 +32,8 @@ namespace videoLibrary.Controllers
                 new Customer { Id = 1, Name = "John Smith" },
                 new Customer { Id = 2, Name = "Mary Williams" },
                 new Customer { Id = 3, Name = "Ferdaus Kawsar" },
-                new Customer { Id = 4, Name = "Adib Zaman" },
-                new Customer { Id = 5, Name = "Nafees Ahmed" },
-                new Customer { Id = 6, Name = "Safa Ahmed" }
+                new Customer { Id = 3, Name = "Adib Zaman" },
+                new Customer { Id = 4, Name = "Nafees Ahmed" }
 
             };
         }
