@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using videoLibrary.Models;
+using videoLibrary.ViewModels;
 
 namespace videoLibrary.Controllers
 {
@@ -21,6 +22,23 @@ namespace videoLibrary.Controllers
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
+        }
+
+        
+        public ActionResult New()
+        {
+            var membershipTypes = _context.MembershipTypes.ToList();
+            var viewModel = new NewCustomerViewModel()
+            { MembershipTypes = membershipTypes};
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Create(Customer customer)
+        {
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+            return RedirectToAction("Index","Customers");
         }
         public ActionResult Index()
         {
