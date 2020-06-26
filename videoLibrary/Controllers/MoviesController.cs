@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,6 +22,53 @@ namespace videoLibrary.Controllers
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
+        }
+
+        public ActionResult New()
+        {
+            var genres = _context.Genres.ToList();
+            var viewModel = new MovieFormViewModel()
+            {
+                Genres = genres
+            };
+            return View("MovieForm", viewModel);
+        }
+
+        public ActionResult Save(Movie movie)
+        {
+            if(movie.Id==0)
+            {
+                movie.DateAdded = DateTime.Now;
+                _context.Movies.Add(movie);
+            }
+            else 
+            {
+                var movieInDb = _context.Movies.SingleOrDefault(m => m.Id==movie.Id);
+
+                movieInDb.Name = movie.Name;
+                movieInDb.NumberInStock = movie.NumberInStock;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+                movieInDb.GenreId = movie.GenreId;
+            }    
+            
+            
+               
+             _context.SaveChanges();
+             return RedirectToAction("Index", "Movies");
+            //return View();
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var movie = _context.Movies.SingleOrDefault(m=> m.Id==id);
+            if (movie == null)
+                HttpNotFound();
+            var viewModel = new MovieFormViewModel()
+            {
+                Movie = movie,
+                Genres = _context.Genres.ToList()
+            };
+            return View("MovieForm", viewModel);
         }
         public ActionResult Random()
         {
@@ -49,10 +97,10 @@ namespace videoLibrary.Controllers
             //return RedirectToAction("Index", "Home", new { page = 1, sortBy = "name" });
         }
 
-        public ActionResult Edit(int id)
+     /*   public ActionResult Edit(int id)
         {
             return Content("id = " + id);
-        }
+        }  */
 
         //[Route("movies/released/{year}/{month:regex(\\d{4}): range(1,12)}")]
         [Route("movies/released/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1,12)}")]
