@@ -11,7 +11,7 @@ namespace videoLibrary.Models
         public int Id { get; set; }
         
         
-        [Required]
+        [Required(ErrorMessage = "Please enter customer's name.")]
         [StringLength(255)]
         public string Name { get; set; }
         
@@ -27,6 +27,7 @@ namespace videoLibrary.Models
         
         
         [Display(Name = "Date of Birth")]
+        [Min18YearsIfAMember]
         public DateTime? Birthdate { get; set; }
 
     }
